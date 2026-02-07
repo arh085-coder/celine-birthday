@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Celine 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0e9 50%, #ffd4e5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: float-up 15s infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+        }
+
+        /* Envelope */
+        .envelope-wrapper {
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .envelope {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            cursor: pointer;
+            position: relative;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .envelope-top {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to bottom, #ff6b9d, #c9184a);
+            position: relative;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            clip-path: polygon(0 0, 50% 60%, 100% 0);
+            box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .envelope.open .envelope-top {
+            transform: rotateX(-180deg);
+        }
+
+        .envelope-body {
+            width: 100%;
+            height: 250px;
+            background: white;
+            position: relative;
+            margin-top: -1px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #ff6b9d;
+        }
+
+        .envelope-body::before {
+            content: '💕';
+            font-size: 60px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .click-hint {
+            text-align: center;
+            color: #c9184a;
+            font-size: 18px;
+            margin-top: 20px;
+            animation: bounce 2s infinite;
+            font-style: italic;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Card content */
+        .card-content {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(201, 24, 74, 0.2);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s ease;
+            position: relative;
+            border: 3px solid #ff6b9d;
+            display: none;
+        }
+
+        .card-content.show {
+            opacity: 1;
+            transform: scale(1);
+            display: block;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .card-header h1 {
+            font-size: 48px;
+            color: #c9184a;
+            margin-bottom: 10px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .card-header .subtitle {
+            font-size: 24px;
+            color: #ff6b9d;
+            font-style: italic;
+        }
+
+        .flower-divider {
+            text-align: center;
+            font-size: 30px;
+            margin: 30px 0;
+        }
+
+        .message {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #4a4a4a;
+            text-align: center;
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+
+        .message p {
+            margin-bottom: 20px;
+        }
+
+        .photos {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .photo-frame {
+            width: 300px;
+            height: 300px;
+            border: 5px solid #ff6b9d;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(201, 24, 74, 0.2);
+            background: linear-gradient(135deg, #ffeef8, #ffd4e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #c9184a;
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.05);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .surprise-box {
+            background: linear-gradient(135deg, #ff6b9d, #c9184a);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(201, 24, 74, 0.3);
+        }
+
+        .surprise-box h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .surprise-box p {
+            font-size: 20px;
+            line-height: 1.6;
+        }
+
+        .love-signature {
+            text-align: center;
+            font-size: 24px;
+            color: #c9184a;
+            margin-top: 40px;
+            font-style: italic;
+        }
+
+        .rose-decoration {
+            text-align: center;
+            font-size: 40px;
+            margin: 20px 0;
+        }
+
+        /* Music control */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            border: 3px solid #ff6b9d;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(201, 24, 74, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background: #ffeef8;
+        }
+
+        .music-control::before {
+            content: '🎵';
+            font-size: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .card-header h1 {
+                font-size: 36px;
+            }
+            
+            .message {
+                font-size: 18px;
+            }
+            
+            .photos {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .photo-frame {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="heart-bg" id="heartBg"></div>
+
+    <!-- Music control -->
+    <div class="music-control" id="musicControl" title="Toggle music"></div>
+    <audio id="bgMusic" loop>
+        <!-- Using a romantic piano piece from a royalty-free source -->
+        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_4a490bd1d5.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <!-- Envelope -->
+        <div class="envelope-wrapper" id="envelopeWrapper">
+            <div class="envelope" id="envelope">
+                <div class="envelope-top"></div>
+                <div class="envelope-body"></div>
+            </div>
+            <p class="click-hint">Click to open 💝</p>
+        </div>
+
+        <!-- Card content -->
+        <div class="card-content" id="cardContent">
+            <div class="card-header">
+                <h1>Happy Birthday, Celine!</h1>
+                <p class="subtitle">My Beautiful Love 💕</p>
+            </div>
+
+            <div class="rose-decoration">🌹✨🌹</div>
+
+            <div class="message">
+                <p>My Dearest Celine,</p>
+                <p>Words can hardly capture the depth of what I feel for you. From the moment you came into my life, everything changed. You are my sunshine on the cloudiest days, my comfort in times of uncertainty, and my greatest joy.</p>
+                <p>Every moment with you is a treasure I hold close to my heart. Your smile lights up my world, your laughter is my favorite melody, and your love is the greatest blessing I could ever ask for.</p>
+                <p>I want you to know that my love for you grows stronger with each passing day. You are not just my girlfriend—you are my best friend, my partner, my everything. I dream of a future where we walk hand in hand through all of life's adventures, supporting each other, loving each other, and building a beautiful life together.</p>
+                <p>You are truly a blessing in my life, and I thank the universe every day for bringing you to me. I want to spend the rest of my life making you as happy as you make me, loving you with all that I am.</p>
+                <p>Happy Birthday, my love. Here's to you, to us, and to all the beautiful moments yet to come. ❤️</p>
+            </div>
+
+            <div class="flower-divider">🌸 💖 🌸</div>
+
+            <div class="photos">
+                <div class="photo-frame">
+                    <img src="us.jpeg" alt="Us together">
+                </div>
+                <div class="photo-frame">
+                    <img src="us-togther.jpeg" alt="Our special moment">
+                </div>
+            </div>
+
+            <div class="flower-divider">✨ 💝 ✨</div>
+
+            <div class="surprise-box">
+                <h2>A Special Surprise 🎁</h2>
+                <p>I have something wonderful planned for you...<br><br>
+                <strong>[Add your special gift or surprise here when you decide!]</strong><br><br>
+                I can't wait to see your smile when you discover it! 💕</p>
+            </div>
+
+            <div class="rose-decoration">🌹 💕 🌹</div>
+
+            <p class="love-signature">Forever Yours,<br>With All My Love ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        const heartBg = document.getElementById('heartBg');
+        const hearts = ['❤️', '💕', '💖', '💗', '💝', '💞'];
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heartBg.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 15000);
+        }
+
+        // Create hearts periodically
+        setInterval(createHeart, 500);
+        
+        // Initial hearts
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createHeart, i * 200);
+        }
+
+        // Envelope opening
+        const envelope = document.getElementById('envelope');
+        const envelopeWrapper = document.getElementById('envelopeWrapper');
+        const cardContent = document.getElementById('cardContent');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        
+        let musicPlaying = false;
+
+        envelope.addEventListener('click', function() {
+            envelope.classList.add('open');
+            
+            // Start music
+            setTimeout(() => {
+                bgMusic.play().catch(e => console.log('Audio play failed:', e));
+                musicPlaying = true;
+            }, 300);
+            
+            setTimeout(() => {
+                envelopeWrapper.style.opacity = '0';
+                envelopeWrapper.style.transform = 'scale(0.8)';
+                
+                setTimeout(() => {
+                    envelopeWrapper.style.display = 'none';
+                    cardContent.classList.add('show');
+                }, 600);
+            }, 1500);
+        });
+
+        // Music control
+        musicControl.addEventListener('click', function() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicPlaying = false;
+                musicControl.style.opacity = '0.5';
+            } else {
+                bgMusic.play().catch(e => console.log('Audio play failed:', e));
+                musicPlaying = true;
+                musicControl.style.opacity = '1';
+            }
+        });
+    </script>
+</body>
+</html>
