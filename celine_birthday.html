@@ -700,7 +700,7 @@
     <!-- Music control -->
     <div class="music-control" id="musicControl" title="Toggle music"></div>
     <audio id="bgMusic" loop>
-        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_4a490bd1d5.mp3" type="audio/mpeg">
+        <source src="music.mp3" type="audio/mpeg">
     </audio>
 
     <div class="container">
@@ -803,14 +803,59 @@
 
         setInterval(createSparkle, 500);
 
+        // Music setup
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        let musicPlaying = false;
+        let musicInitialized = false;
+
+        // Function to toggle music
+        function toggleMusic() {
+            if (!musicInitialized) {
+                // First time - load the audio
+                bgMusic.load();
+                musicInitialized = true;
+            }
+
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicControl.classList.remove('paused');
+                    musicControl.classList.add('playing');
+                    musicControl.style.opacity = '1';
+                    console.log('Music playing');
+                }).catch(e => {
+                    console.log('Play failed:', e);
+                    musicPlaying = false;
+                });
+            } else {
+                bgMusic.pause();
+                musicPlaying = false;
+                musicControl.classList.remove('playing');
+                musicControl.classList.add('paused');
+                musicControl.style.opacity = '0.6';
+                console.log('Music paused');
+            }
+        }
+
+        // Music control click
+        musicControl.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMusic();
+        });
+
+        // Also try on touchstart for mobile
+        musicControl.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMusic();
+        });
+
         // Envelope opening with enhanced effects
         const envelope = document.getElementById('envelope');
         const envelopeWrapper = document.getElementById('envelopeWrapper');
         const cardContent = document.getElementById('cardContent');
-        const bgMusic = document.getElementById('bgMusic');
-        const musicControl = document.getElementById('musicControl');
-        
-        let musicPlaying = false;
 
         envelope.addEventListener('click', function() {
             envelope.classList.add('open');
@@ -823,15 +868,18 @@
                 }, i * 50);
             }
             
-            // Start music
+            // Try to start music (may be blocked by browser)
             setTimeout(() => {
+                if (!musicInitialized) {
+                    bgMusic.load();
+                    musicInitialized = true;
+                }
                 bgMusic.play().then(() => {
                     musicPlaying = true;
                     musicControl.classList.add('playing');
                     musicControl.style.opacity = '1';
                 }).catch(e => {
-                    console.log('Audio play failed:', e);
-                    // If autoplay fails, user can click the music button
+                    console.log('Autoplay blocked - user can use music button');
                 });
             }, 300);
             
@@ -844,29 +892,6 @@
                     cardContent.classList.add('show');
                 }, 800);
             }, 2000);
-        });
-
-        // Music control
-        musicControl.addEventListener('click', function(e) {
-            e.stopPropagation(); // Prevent any bubbling
-            
-            if (musicPlaying) {
-                bgMusic.pause();
-                musicPlaying = false;
-                musicControl.classList.remove('playing');
-                musicControl.classList.add('paused');
-                musicControl.style.opacity = '0.6';
-            } else {
-                bgMusic.play().then(() => {
-                    musicPlaying = true;
-                    musicControl.classList.remove('paused');
-                    musicControl.classList.add('playing');
-                    musicControl.style.opacity = '1';
-                }).catch(e => {
-                    console.log('Audio play failed:', e);
-                    alert('Click the button again to play music!');
-                });
-            }
         });
     </script>
 </body>
