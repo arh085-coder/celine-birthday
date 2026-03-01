@@ -645,6 +645,24 @@
             filter: drop-shadow(0 0 5px rgba(255, 107, 157, 0.5));
         }
 
+        .music-control.playing::before {
+            content: '🎵';
+            animation: musicNote 0.5s ease infinite;
+        }
+
+        .music-control.paused::before {
+            content: '⏸️';
+        }
+
+        @keyframes musicNote {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
         @media (max-width: 768px) {
             .card-header h1 {
                 font-size: 42px;
@@ -807,8 +825,14 @@
             
             // Start music
             setTimeout(() => {
-                bgMusic.play().catch(e => console.log('Audio play failed:', e));
-                musicPlaying = true;
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicControl.classList.add('playing');
+                    musicControl.style.opacity = '1';
+                }).catch(e => {
+                    console.log('Audio play failed:', e);
+                    // If autoplay fails, user can click the music button
+                });
             }, 300);
             
             setTimeout(() => {
@@ -823,15 +847,25 @@
         });
 
         // Music control
-        musicControl.addEventListener('click', function() {
+        musicControl.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent any bubbling
+            
             if (musicPlaying) {
                 bgMusic.pause();
                 musicPlaying = false;
+                musicControl.classList.remove('playing');
+                musicControl.classList.add('paused');
                 musicControl.style.opacity = '0.6';
             } else {
-                bgMusic.play().catch(e => console.log('Audio play failed:', e));
-                musicPlaying = true;
-                musicControl.style.opacity = '1';
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicControl.classList.remove('paused');
+                    musicControl.classList.add('playing');
+                    musicControl.style.opacity = '1';
+                }).catch(e => {
+                    console.log('Audio play failed:', e);
+                    alert('Click the button again to play music!');
+                });
             }
         });
     </script>
